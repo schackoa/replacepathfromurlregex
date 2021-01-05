@@ -7,4 +7,4 @@ summary: '[ReplacePathFromURLRegex] Replace Path From URL Regex'
 
 testData:
   regex: "^https?://([a-z]+).demo.localhost(:[0-9]+)?/prefix/(.*?)$"
-  replacement: /${1}/${2}
+  replacement: /${1}/${3}

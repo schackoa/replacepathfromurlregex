@@ -6,12 +6,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	)
+)
 
 func TestReplacePathFromUrlRegex(t *testing.T) {
 	cfg := replacepathfromurlregex.CreateConfig()
-	cfg.Regex = "^https?://([a-z]+).nginx.roc(:[0-9]+)?/c/prefix/(.*?)$"
+	cfg.Regex = "^https?://([a-z]+).demo.localhost(:[0-9]+)?/c/prefix/(.*?)$"
 	cfg.Replacement = "/${1}/${3}"
 
 	ctx := context.Background()
@@ -24,7 +23,7 @@ func TestReplacePathFromUrlRegex(t *testing.T) {
 
 	recorder := httptest.NewRecorder()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://wp:aaa@a.nginx.roc:80/c/prefix/uri", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://a.demo.localhost:80/c/prefix/uri", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
