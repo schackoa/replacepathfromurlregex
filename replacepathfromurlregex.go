@@ -27,14 +27,13 @@ type Config struct {
 
 // CreateConfig creates the default plugin configuration.
 func CreateConfig() *Config {
-	return &Config{
-	}
+	return &Config{}
 }
 
 // ReplacePathFromURLRegex a traefik plugin.
 type ReplacePathFromURLRegex struct {
-	next     http.Handler
-	name     string
+	next        http.Handler
+	name        string
 	regexp      *regexp.Regexp
 	replacement string
 }
@@ -46,9 +45,9 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		return nil, fmt.Errorf("error compiling regular expression %s: %w", config.Regex, err)
 	}
 	return &ReplacePathFromURLRegex{
-		next:     next,
-		name:     name,
-		regexp:   exp,
+		next:        next,
+		name:        name,
+		regexp:      exp,
 		replacement: strings.TrimSpace(config.Replacement),
 	}, nil
 }
@@ -75,22 +74,24 @@ func (r *ReplacePathFromURLRegex) ServeHTTP(rw http.ResponseWriter, req *http.Re
 			return
 		}
 
-		// as replacement can introduce escaped characters
-		// Path must remain an unescaped version of RawPath
-		// Doesn't handle multiple times encoded replacement (`/` => `%2F` => `%252F` => ...)
-		var err error
-		req.URL.Path, err = url.PathUnescape(rewrittenPath.String())
+		parse, err := url.Parse(rewrittenPath.String())
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
+		values := req.URL.Query()
+		for k, v := range parse.Query() {
+			values[k] = v
+		}
+
+		req.URL.Path = parse.Path
+		req.URL.RawQuery = values.Encode()
 		req.RequestURI = req.URL.RequestURI()
 	}
 
 	r.next.ServeHTTP(rw, req)
 }
-
 
 func rawURL(req *http.Request) string {
 	scheme := "http"
@@ -105,14 +106,12 @@ func rawURL(req *http.Request) string {
 		uri = req.URL.RawPath
 	}
 
-
 	if req.TLS != nil {
 		scheme = "https"
 	}
 
 	return strings.Join([]string{scheme, "://", host, port, uri}, "")
 }
-
 
 func applyString(in string, out io.Writer, req *http.Request) error {
 	t, err := template.New("t").Parse(in)

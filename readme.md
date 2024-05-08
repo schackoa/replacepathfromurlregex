@@ -1,4 +1,4 @@
-# ReplacePathFromURLRegex a Traefik plugin
+# ReplaceURLRegex a Traefik plugin
 
 [Traefik](https://traefik.io) plugins are developed using the [Go language](https://golang.org).
 
@@ -35,8 +35,8 @@ pilot:
 experimental:
   plugins:
     replacepathfromurlregex:
-      moduleName: github.com/rocdove/replacepathfromurlregex
-      version: v0.0.2
+      moduleName: github.com/schackoa/replacepathfromurlregex
+      version: v0.0.4
 ```
 
 Here is an example of a file provider dynamic configuration (given here in YAML), where the interesting part is the `http.middlewares` section:
@@ -81,10 +81,10 @@ pilot:
 experimental:
   devPlugin:
     goPath: /plugins/go
-    moduleName: github.com/rocdove/replacepathfromurlregex
+    moduleName: github.com/schackoa/replacepathfromurlregex
 ```
 
-(In the above example, the `replacepathfromurlregex` plugin will be loaded from the path `/plugins/go/src/github.com/rocdove/replacepathfromurlregex`.)
+(In the above example, the `replacepathfromurlregex` plugin will be loaded from the path `/plugins/go/src/github.com/schackoa/replacepathfromurlregex`.)
 
 ```yaml
 # Dynamic configuration
