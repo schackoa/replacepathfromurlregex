@@ -6,6 +6,10 @@ A [Traefik](https://traefik.io) middleware plugin is just a [Go package](https:/
 
 Rather than being pre-compiled and linked, however, plugins are executed on the fly by [Yaegi](https://github.com/traefik/yaegi), an embedded Go interpreter.
 
+## Credits
+
+This project is based on the original project [replacepathfromurlregex](https://github.com/rocdove/replacepathfromurlregex) by [rocdove](https://github.com/rocdove). All rights and acknowledgements go to the original author.
+
 ## Usage
 
 For a plugin to be active for a given Traefik instance, it must be declared in the static configuration.
